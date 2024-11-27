@@ -4,8 +4,10 @@ interface ChessPlayer {
   elo: number;
 }
 
-function findChampions(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
+export default function findChampions(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
   return chessPlayers;
 }
 
-export default findChampions;
+export function checkAge(chessPlayer: ChessPlayer) : boolean {
+  return chessPlayer.age > 0;
+}
