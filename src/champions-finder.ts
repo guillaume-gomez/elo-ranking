@@ -11,6 +11,11 @@ interface ChessPlayer {
   */
 }
 
+
+/*
+  The algorithm efficiency is On^2
+  In order to improve the performances, we could sort the chessPlayers array by age
+*/
 export default function findChampions(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
   const sanitizedChessPlayers = chessPlayers.filter((chessPlayer) => checkAge(chessPlayer) && checkElo(chessPlayer));
 
