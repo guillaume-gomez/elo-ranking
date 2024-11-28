@@ -1,9 +1,18 @@
+/*
+ Informations:
+  this file contains two method to compute the champions.
+  First, findChampionsNaive trying to implement the algorithm in a functionnal way without taking in account the performances.
+  Then, findChampionsImproved trying to focus on the performances and not the readibility of the code.
+
+  To extend, it could have been interesting to use a database and indexes (age and eloscore) to take profit of database optimizations.
+*/
+
 
 interface ChessPlayer {
   age: number;
   /* age is a number here.
     A datetime type could have been interesting to compute the age in days and not in years.
-    However the algorithm would work as well with a datetime
+    However the algorithm would work as well with a datetime type
   */
   elo: number;
   username: string;
@@ -22,7 +31,7 @@ export function checkElo(chessPlayer: ChessPlayer) : boolean {
 
 /*
   The algorithm efficiency is On^2
-  In order to improve the performances, we could sort the chessPlayers array by age
+  see findChampionsImproved for a more efficiant version
 */
 /*export default*/ function findChampionsNaive(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
   const sanitizedChessPlayers = chessPlayers.filter((chessPlayer) => checkAge(chessPlayer) && checkElo(chessPlayer));
@@ -39,12 +48,15 @@ export function checkElo(chessPlayer: ChessPlayer) : boolean {
 export function isChampion(chessPlayerToCompare: ChessPlayer, chessPlayers: ChessPlayer[]): boolean {
   const foundBetterPlayer = chessPlayers.find((chessPlayerCompared) => {
     return (chessPlayerCompared.elo > chessPlayerToCompare.elo && chessPlayerCompared.age <= chessPlayerToCompare.age) ||
-           (chessPlayerCompared.age < chessPlayerToCompare.age && chessPlayerCompared.elo >= chessPlayerToCompare.elo)
+           (chessPlayerCompared.elo >= chessPlayerToCompare.elo && chessPlayerCompared.age < chessPlayerToCompare.age)
   });
 
   return !foundBetterPlayer;
 }
 
+/*
+  The algorithm efficiency is n*log(n)
+*/
 export default function findChampionsImproved(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
   const sanitizedChessPlayers = chessPlayers.filter((chessPlayer) => checkAge(chessPlayer) && checkElo(chessPlayer));
   const sortChessPlayersArray = sortChessPlayers(sanitizedChessPlayers);
@@ -76,7 +88,7 @@ export default function findChampionsImproved(chessPlayers: ChessPlayer[]) : Che
 
 function hasBetterPlayer(chessPlayerToCompare: ChessPlayer, chessPlayerCompared: ChessPlayer) : boolean {
    return (chessPlayerCompared.elo > chessPlayerToCompare.elo && chessPlayerCompared.age <= chessPlayerToCompare.age) ||
-           (chessPlayerCompared.age < chessPlayerToCompare.age && chessPlayerCompared.elo >= chessPlayerToCompare.elo)
+          (chessPlayerCompared.elo >= chessPlayerToCompare.elo && chessPlayerCompared.age < chessPlayerToCompare.age)
 }
 
 export function sortChessPlayers(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
