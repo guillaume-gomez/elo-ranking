@@ -108,6 +108,21 @@ describe('testing findChampions function', () => {
     ]);
   });
 
+  test('all players have the same age and the same ELO score', () => {
+    const chessPlayers = [
+      {username: "Francois", elo: 2000, age: 20},
+      {username: "Sarah", elo: 2000, age: 20},
+      {username: "Justine", elo: 2000, age: 20}
+    ];
+    expect(
+      findChampions(chessPlayers)
+    ).toEqual([
+      {username: "Francois", elo: 2000, age: 20},
+      {username: "Sarah", elo: 2000, age: 20},
+      {username: "Justine", elo: 2000, age: 20}
+    ]);
+  });
+
   test('several players should return the champions', () => {
     const chessPlayers = [
       {username: "Pascale", elo: 1500, age: 18},
@@ -163,6 +178,33 @@ test('several players', () => {
       findChampions(chessPlayers)
     ).toEqual([
       {username: "Carla", elo: 2020, age: 25}
+    ]);
+  });
+
+  test('a bigger example', () => {
+    const chessPlayers = [
+     {username: "John", elo: 1500, age: 33},
+     {username: "Louis", elo: 1000, age: 33},
+     {username: "Julia", elo: 2000, age: 42},
+     {username: "Nicolas", elo: 1780, age: 37},
+     {username: "Pascale", elo: 1470, age: 27},
+     {username: "Michaella", elo: 2150, age: 27},
+     {username: "Joan", elo: 1781, age: 56},
+     {username: "Pierre", elo: 2200, age: 33},
+     {username: "Claude", elo: 2000, age: 41},
+     {username: "Aziz", elo: 1980, age: 40},
+     {username: "Carla", elo: 2020, age: 25},
+     {username: "Victor", elo: 1460, age: 33},
+     {username: "Ellis", elo: 1880, age: 30},
+     {username: "Henri", elo: 1880, age: 45},
+    ];
+
+    expect(
+      findChampions(chessPlayers)
+    ).toEqual([
+      {username: "Carla", elo: 2020, age: 25},
+      {username: "Michaella", elo: 2150, age: 27},
+      {username: "Pierre", elo: 2200, age: 33},
     ]);
   });
 

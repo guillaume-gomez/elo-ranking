@@ -54,7 +54,10 @@ export default function findChampionsImproved(chessPlayers: ChessPlayer[]) : Che
   sortChessPlayersArray.forEach((chessPlayerToCompare, indexPosition) => {
     let isChampion = true;
     for(let i = indexPosition -1; i >= 0; i--) {
-      if(hasBetterPlayer(chessPlayerToCompare, sortChessPlayersArray[i])) {
+      if(
+        bestYougerElo > chessPlayerToCompare.elo || 
+        hasBetterPlayer(chessPlayerToCompare, sortChessPlayersArray[i])
+      ) {
         isChampion = false;
         if(sortChessPlayersArray[indexPosition].elo > bestYougerElo) {
           bestYougerElo = sortChessPlayersArray[indexPosition].elo;
