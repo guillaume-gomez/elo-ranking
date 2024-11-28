@@ -11,16 +11,25 @@ interface ChessPlayer {
   */
 }
 
+export function checkAge(chessPlayer: ChessPlayer) : boolean {
+  return chessPlayer.age > 0;
+}
+
+// based on chess.com you cannot have an ELO score below the threshold 100
+export function checkElo(chessPlayer: ChessPlayer) : boolean {
+  return chessPlayer.elo >= 100;
+}
 
 /*
   The algorithm efficiency is On^2
   In order to improve the performances, we could sort the chessPlayers array by age
 */
-/*export default*/ function findChampions(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
+/*export default*/ function findChampionsNaive(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
   const sanitizedChessPlayers = chessPlayers.filter((chessPlayer) => checkAge(chessPlayer) && checkElo(chessPlayer));
 
   const champions = sanitizedChessPlayers.filter((chessPlayer, index) => {
-    let chessPlayersWithoutCurrentChessPlayer = sanitizedChessPlayers.slice()
+    // remove chessPlayer to be compared in the sanitizedChessPlayers
+    let chessPlayersWithoutCurrentChessPlayer = sanitizedChessPlayers.slice();
     chessPlayersWithoutCurrentChessPlayer.splice(index, 1);
     return isChampion(chessPlayer, chessPlayersWithoutCurrentChessPlayer);
   });
@@ -36,19 +45,10 @@ export function isChampion(chessPlayerToCompare: ChessPlayer, chessPlayers: Ches
   return !foundBetterPlayer;
 }
 
-export function checkAge(chessPlayer: ChessPlayer) : boolean {
-  return chessPlayer.age > 0;
-}
-
-// based on chess.com you cannot have an ELO score below the threshold 100
-export function checkElo(chessPlayer: ChessPlayer) : boolean {
-  return chessPlayer.elo >= 100;
-}
-
 export default function findChampionsImproved(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
   const sanitizedChessPlayers = chessPlayers.filter((chessPlayer) => checkAge(chessPlayer) && checkElo(chessPlayer));
   const sortChessPlayersArray = sortChessPlayers(sanitizedChessPlayers);
-  let bestCurrentElo = 0;
+  let bestYougerElo = 0;
   let championsArray = [];
 
   sortChessPlayersArray.forEach((chessPlayerToCompare, indexPosition) => {
@@ -56,7 +56,11 @@ export default function findChampionsImproved(chessPlayers: ChessPlayer[]) : Che
     for(let i = indexPosition -1; i >= 0; i--) {
       if(hasBetterPlayer(chessPlayerToCompare, sortChessPlayersArray[i])) {
         isChampion = false;
-        bestCurrentElo = sortChessPlayersArray[indexPosition].elo;
+        if(sortChessPlayersArray[indexPosition].elo > bestYougerElo) {
+          bestYougerElo = sortChessPlayersArray[indexPosition].elo;
+        }
+        break;
+
       }
     }
     if(isChampion){
@@ -84,3 +88,4 @@ export function sortChessPlayers(chessPlayers: ChessPlayer[]) : ChessPlayer[] {
 
   return copyChessPlayers;
 }
+
